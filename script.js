@@ -99,7 +99,7 @@ function spawnHiddenRing() {
         `;
 
         const respond = () => {
-            ring.innerHTML = "OBAAAAA YESSSSS";
+            ring.innerHTML = "OBAAAAA YESSSSS 🤘🤘🤘";
             ring.className = "hidden-ring ring-celebration";
             createHearts();
 
