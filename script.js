@@ -136,3 +136,47 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+// === INÍCIO DO SCRIPT DAS ESTRELINHAS SECRETAS ===
+document.addEventListener('DOMContentLoaded', () => {
+    const clues = document.querySelectorAll('.secret-clue');
+    const modal = document.getElementById('letterModal'); 
+    const closeBtn = document.getElementById('closeLetter'); 
+    let foundCount = 0;
+
+    function activateStar(element) {
+        if (!element.classList.contains('found')) {
+            element.classList.add('found');
+            foundCount++;
+            
+            if (foundCount === 3) {
+                // Abre a carta quando achar a 3ª estrela
+                setTimeout(() => {
+                    modal.classList.add('show');
+                }, 600);
+            }
+        }
+    }
+
+    clues.forEach(clue => {
+        // Evento garantido para telas de celular (touch)
+        clue.addEventListener('touchstart', function(e) {
+            e.preventDefault(); 
+            activateStar(this);
+        }, { passive: false });
+        
+        // Evento normal de mouse no PC
+        clue.addEventListener('click', function(e) {
+            e.preventDefault();
+            activateStar(this);
+        });
+    });
+
+    // Fecha a carta
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            modal.classList.remove('show');
+        });
+    }
+});
+// === FIM DO SCRIPT DAS ESTRELINHAS SECRETAS ===
