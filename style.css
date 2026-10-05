@@ -328,3 +328,7 @@ h1 {
     color: #ff4b6e;
 }
 /* === FIM DO CSS DAS ESTRELINHAS E DA CARTA === */
+
+#mainPhoto {
+    cursor: pointer;
+}

@@ -1,7 +1,17 @@
 // Lista com os nomes dos dois arquivos de foto
 const photos = [
-    "meu_amor.jpeg",  // Foto 1 (dela)
-    "nois.jpeg"        // Foto 2 (vocês dois)
+    "img/meu_amor.jpeg",
+    "img/nois.jpeg",
+    "img/2.jpeg",
+    "img/3.jpeg",
+    "img/4.jpeg",
+    "img/5.jpeg",
+    "img/7.jpeg",
+    "img/8.jpeg",
+    "img/9.jpeg",
+    "img/10.jpeg",
+    "img/11.jpeg",
+    "img/12.jpeg"
 ];
 let currentPhotoIndex = 0;
 
@@ -180,3 +190,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 // === FIM DO SCRIPT DAS ESTRELINHAS SECRETAS ===
+
+
+// Evento para trocar a foto ao clicar nela
+const mainPhoto = document.getElementById("mainPhoto");
+mainPhoto.addEventListener("click", () => {
+    mainPhoto.classList.add("fade-out");
+
+    setTimeout(() => {
+        currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+        mainPhoto.src = photos[currentPhotoIndex];
+        mainPhoto.classList.remove("fade-out");
+    }, 200);
+});
