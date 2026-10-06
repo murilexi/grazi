@@ -7,7 +7,6 @@ const photos = [
     "img/4.jpeg",
     "img/5.jpeg",
     "img/7.jpeg",
-    "img/8.jpeg",
     "img/9.jpeg",
     "img/10.jpeg",
     "img/11.jpeg",
@@ -203,3 +202,188 @@ mainPhoto.addEventListener("click", () => {
         mainPhoto.classList.remove("fade-out");
     }, 200);
 });
+
+// === PARTÍCULAS NO FUNDO ===
+document.addEventListener("DOMContentLoaded", () => {
+    if (typeof particlesJS !== 'undefined') {
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 40 }, // Quantidade de partículas
+                "color": { "value": "#ff4b6e" }, // Cor rosa/vermelho do seu layout
+                "shape": { "type": "circle" },
+                "opacity": { 
+                    "value": 0.4, 
+                    "random": true 
+                },
+                "size": { 
+                    "value": 2, 
+                    "random": true 
+                },
+                "line_linked": { 
+                    "enable": true, 
+                    "distance": 150, 
+                    "color": "#ff4b6e", 
+                    "opacity": 0.1, 
+                    "width": 1 
+                },
+                "move": { 
+                    "enable": true, 
+                    "speed": 0.8, // Bem lentinho e romântico
+                    "direction": "top", 
+                    "random": true,
+                    "out_mode": "out" 
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": { 
+                    "onhover": { "enable": true, "mode": "bubble" },
+                    "onclick": { "enable": true, "mode": "push" }
+                },
+                "modes": { 
+                    "bubble": { "distance": 200, "size": 4, "duration": 2, "opacity": 1 },
+                    "push": { "particles_nb": 3 }
+                }
+            },
+            "retina_detect": true
+        });
+    }
+});
+
+
+// // === CHEAT CODE: GRAZI (Terminal + Apagão) ===
+let inputBuffer = "";
+const secretWord = "grazi";
+
+window.addEventListener('keydown', (e) => {
+    inputBuffer += e.key.toLowerCase();
+    
+    if (inputBuffer.length > 20) {
+        inputBuffer = inputBuffer.substring(inputBuffer.length - 20);
+    }
+    
+    if (inputBuffer.includes(secretWord)) {
+        inputBuffer = ""; // Reseta a memória
+        iniciarHackEApagao();
+    }
+});
+
+function iniciarHackEApagao() {
+    // === TOCA A MÚSICA ===
+    // O ID aqui tem que ser o mesmo que você colocou no <audio id="..."> lá no HTML!
+    const musica = document.getElementById("musicaFundo"); 
+    if (musica) {
+        musica.currentTime = 0; // Garante que a música comece do zero
+        musica.play();          // Dá o play!
+    }
+
+    // 1. Cria a tela do terminal por cima de tudo
+    const tela = document.createElement('div');
+    tela.style.position = 'fixed';
+    tela.style.top = '0';
+    tela.style.left = '0';
+    tela.style.width = '100vw';
+    tela.style.height = '100vh';
+    tela.style.backgroundColor = '#050505'; // Breu total no início
+    tela.style.color = '#ff4b6e';
+    tela.style.fontFamily = "'VT323', monospace";
+    tela.style.fontSize = '2rem';
+    tela.style.padding = '40px';
+    tela.style.zIndex = '999999';
+    tela.style.display = 'flex';
+    tela.style.flexDirection = 'column';
+    tela.style.justifyContent = 'center';
+    tela.style.alignItems = 'center';
+    tela.style.textAlign = 'center';
+    document.body.appendChild(tela);
+
+    // Frases do terminal
+    const linhas = [
+        "> ATIVANDO TONHÃO MASTER...",
+        "> VERIFICANDO CREDENCIAIS...",
+        "> USUÁRIA 'GRAZI' IDENTIFICADA.",
+        "> STATUS: AMOR DA MINHA VIDA. ♡"
+    ];
+
+    let delay = 0;
+    
+    // Digita as frases do terminal uma por uma
+    linhas.forEach((linha) => {
+        setTimeout(() => {
+            const p = document.createElement('p');
+            p.style.margin = '10px 0';
+            p.innerText = linha;
+            tela.appendChild(p);
+        }, delay);
+        delay += 1200;
+    });
+
+    // 2. Inicia o Apagão depois que o terminal termina
+    setTimeout(() => {
+        // Limpa os textos do terminal
+        tela.innerHTML = '';
+        
+        // Fundo 100% preto
+        tela.style.background = '#000000';
+        tela.style.transition = 'background 2s ease';
+        
+        // Pega a imagem que está atualmente na tela principal
+        const imagemAtual = "img/8.jpeg";
+        
+        // Cria a foto no centro
+        const fotoDestaque = document.createElement('img');
+        fotoDestaque.src = imagemAtual;
+        fotoDestaque.style.width = '300px';
+        fotoDestaque.style.maxWidth = '80vw';
+        fotoDestaque.style.borderRadius = '15px';
+        fotoDestaque.style.boxShadow = '0 0 40px rgba(255, 75, 110, 0.6)';
+        fotoDestaque.style.opacity = '0';
+        fotoDestaque.style.transition = 'opacity 2s ease';
+        
+        // Cria o texto romântico
+        const textoDestaque = document.createElement('p');
+        textoDestaque.innerText = 'só tenho olhos pra você.';
+        textoDestaque.style.color = '#ff4b6e';
+        textoDestaque.style.fontFamily = "'VT323', monospace";
+        textoDestaque.style.fontSize = '2.5rem';
+        textoDestaque.style.marginTop = '20px';
+        textoDestaque.style.opacity = '0';
+        textoDestaque.style.transition = 'opacity 2s ease 1s'; 
+        
+        // Dica sutil para voltar ao site
+        const dicaSair = document.createElement('p');
+        dicaSair.innerText = '(clique em qualquer lugar para voltar)';
+        dicaSair.style.color = '#444';
+        dicaSair.style.fontSize = '1rem';
+        dicaSair.style.marginTop = '40px';
+        dicaSair.style.opacity = '0';
+        dicaSair.style.transition = 'opacity 2s ease 2s'; 
+        dicaSair.style.cursor = 'pointer';
+        
+        tela.appendChild(fotoDestaque);
+        tela.appendChild(textoDestaque);
+        tela.appendChild(dicaSair);
+        
+        // Faz a foto e os textos surgirem
+        setTimeout(() => {
+            fotoDestaque.style.opacity = '1';
+            textoDestaque.style.opacity = '1';
+            dicaSair.style.opacity = '1';
+        }, 100);
+
+        // === CLIQUE PARA SAIR E PARAR A MÚSICA ===
+        tela.addEventListener('click', () => {
+            // Pausa a música
+            if (musica) {
+                musica.pause();         
+                musica.currentTime = 0; 
+            }
+            
+            // Faz a tela preta sumir suavemente
+            tela.style.transition = "opacity 1s ease";
+            tela.style.opacity = "0";
+            setTimeout(() => tela.remove(), 1000);
+        });
+
+    }, delay + 2000); // Começa 2 segundos depois da última frase do terminal
+}
