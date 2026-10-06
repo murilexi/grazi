@@ -22,7 +22,7 @@ let eggActive = false;
 const startDate = new Date(2026, 3, 16, 22, 0, 0);
 
 // Mensagem digitada
-const message = "fiz esse site enquanto vc tava na aula da USP só pra lembrar o quanto você é especial pra mim. te amo muito meu amorrrr ♥";
+const message = "fiz esse site enquanto vc tava na aula da USP só pra lembrar o quanto você é especial pra mim.";
 let messageIndex = 0;
 const typingSpeed = 35;
 
@@ -386,4 +386,33 @@ function iniciarHackEApagao() {
         });
 
     }, delay + 2000); // Começa 2 segundos depois da última frase do terminal
+}
+
+// === CHEAT CODE MOBILE (5 toques rápidos) ===
+// Pega o texto da mensagem romântica na tela
+const textoMensagem = document.getElementById("typewriter");
+let contagemToques = 0;
+let timerToque;
+
+if (textoMensagem) {
+    // Aumenta a área de clique e avisa o navegador que é interativo
+    textoMensagem.style.cursor = "pointer";
+    
+    textoMensagem.addEventListener("click", () => {
+        contagemToques++;
+        
+        // Limpa o timer anterior
+        clearTimeout(timerToque);
+        
+        // Se ela tocou 5 vezes rápidas
+        if (contagemToques === 5) {
+            contagemToques = 0; // Reseta a memória de toques
+            iniciarHackEApagao(); // Ativa a mesma função do apagão!
+        }
+        
+        // Se ela demorar mais de 1 segundo entre um toque e outro, a contagem zera
+        timerToque = setTimeout(() => {
+            contagemToques = 0;
+        }, 1000);
+    });
 }
