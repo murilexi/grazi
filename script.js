@@ -121,7 +121,7 @@ function iniciarHackEApagao(nomeAlvo) {
     const textoDestaqueFinal = isGrazi ? "só tenho olhos pra você." : "será que você me ama?";
     
     // COLOQUE O NOME DAS FOTOS CERTAS AQUI EMBAIXO:
-    const imagemAtual = isGrazi ? "img/8.jpeg" : "img/foto_do_murilo.jpeg"; 
+    const imagemAtual = isGrazi ? "img/8.jpeg" : "img/murilo.jpeg"; 
     
     const musica = document.getElementById(audioId); 
     if (musica) {
