@@ -111,22 +111,135 @@ function spawnHiddenRing() {
     document.body.appendChild(ring);
 }
 
-// === LÓGICA DO TERMINAL / APAGÃO ===
+// === HELPER PARA CARREGAR O SCRIPT DO MOSAICO COM SEGURANÇA ===
+function carregarScriptMosaico(callback) {
+    if (typeof Pmframe !== "undefined") {
+        callback();
+        return;
+    }
+
+    const scriptExistente = document.querySelector('script[src*="mosaicEmbed.js"]');
+    if (scriptExistente) {
+        scriptExistente.addEventListener("load", callback, { once: true });
+        return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://cdn.picturemosaics.com/photo-mosaic-tool/js/mosaicEmbed.js";
+    script.async = true;
+    script.onload = callback;
+    document.body.appendChild(script);
+}
+
+// === EASTER EGG 3: MOSAICO ("euteamo" / 10 toques) ===
+function iniciarMosaicoAmor() {
+    // Evita abrir duas telas de mosaico ao mesmo tempo
+    if (document.getElementById("overlayMosaicoAmor")) return;
+
+    const musica = document.getElementById("musicaFundo");
+    if (musica) {
+        musica.currentTime = 0;
+        musica.play().catch(() => {});
+    }
+
+    const tela = document.createElement("div");
+    tela.id = "overlayMosaicoAmor";
+    tela.style.position = "fixed";
+    tela.style.top = "0";
+    tela.style.left = "0";
+    tela.style.width = "100vw";
+    tela.style.height = "100vh";
+    tela.style.backgroundColor = "#050505";
+    tela.style.color = "#ff4b6e";
+    tela.style.fontFamily = "'VT323', monospace";
+    tela.style.zIndex = "999999";
+    tela.style.display = "flex";
+    tela.style.flexDirection = "column";
+    tela.style.justifyContent = "center";
+    tela.style.alignItems = "center";
+    tela.style.textAlign = "center";
+    tela.style.padding = "20px";
+    tela.style.boxSizing = "border-box";
+    tela.style.overflowY = "auto";
+    tela.style.opacity = "0";
+    tela.style.transition = "opacity 0.6s ease";
+
+    const titulo = document.createElement("p");
+    titulo.innerText = "> COMPILANDO NOSSAS MEMÓRIAS... EU TE AMO ♡";
+    titulo.style.fontSize = "1.8rem";
+    titulo.style.margin = "0 0 16px 0";
+
+    const mosaicBox = document.createElement("div");
+    mosaicBox.id = "pictureMosaicsEmbed";
+    mosaicBox.style.width = "100%";
+    mosaicBox.style.maxWidth = "680px";
+    mosaicBox.style.minHeight = "320px";
+    mosaicBox.style.borderRadius = "14px";
+    mosaicBox.style.overflow = "hidden";
+    mosaicBox.style.boxShadow = "0 0 35px rgba(255, 75, 110, 0.35)";
+    mosaicBox.style.backgroundColor = "#0d0d12";
+
+    const btnVoltar = document.createElement("button");
+    btnVoltar.innerText = "[ fechar e voltar ]";
+    btnVoltar.style.marginTop = "20px";
+    btnVoltar.style.padding = "10px 22px";
+    btnVoltar.style.background = "transparent";
+    btnVoltar.style.color = "#ff4b6e";
+    btnVoltar.style.border = "1px solid #ff4b6e";
+    btnVoltar.style.borderRadius = "8px";
+    btnVoltar.style.fontFamily = "'VT323', monospace";
+    btnVoltar.style.fontSize = "1.4rem";
+    btnVoltar.style.cursor = "pointer";
+
+    tela.appendChild(titulo);
+    tela.appendChild(mosaicBox);
+    tela.appendChild(btnVoltar);
+    document.body.appendChild(tela);
+
+    requestAnimationFrame(() => {
+        tela.style.opacity = "1";
+    });
+
+    carregarScriptMosaico(() => {
+        try {
+            const pmFrame = new Pmframe({
+                element: "pictureMosaicsEmbed",
+                uid: "M1484961",
+                pid: "p0",
+                stor: "s7/v136"
+            });
+            pmFrame.init();
+        } catch (err) {
+            mosaicBox.innerHTML = `<p style="padding: 24px; font-size: 1.4rem;">não consegui carregar o mosaico agora :(</p>`;
+        }
+    });
+
+    btnVoltar.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (musica) {
+            musica.pause();
+            musica.currentTime = 0;
+        }
+        tela.style.opacity = "0";
+        setTimeout(() => tela.remove(), 600);
+    });
+}
+
+// === LÓGICA DO TERMINAL / APAGÃO ("grazi" / "murilo") ===
 function iniciarHackEApagao(nomeAlvo) {
     const isGrazi = nomeAlvo === "grazi";
     
-    // Variáveis dinâmicas: mudam dependendo de quem ativou o código
     const audioId = isGrazi ? "musicaFundo" : "musicaFundo2";
     const textoTerminalFinal = isGrazi ? "> STATUS: AMOR DA MINHA VIDA. ♡" : "> APRESENTANDO O TONHO:";
     const textoDestaqueFinal = isGrazi ? "só tenho olhos pra você." : "será que você me ama?";
     
     // COLOQUE O NOME DAS FOTOS CERTAS AQUI EMBAIXO:
-    const imagemAtual = isGrazi ? "img/8.jpeg" : "img/murilo.jpeg"; 
+    const imagemAtual = isGrazi ? "img/8.jpeg" : "img/foto_do_murilo.jpeg"; 
     
     const musica = document.getElementById(audioId); 
     if (musica) {
         musica.currentTime = 0;
-        musica.play();         
+        musica.play().catch(() => {});         
     }
 
     const tela = document.createElement('div');
@@ -222,12 +335,10 @@ function iniciarHackEApagao(nomeAlvo) {
 
 // === EVENTOS GLOBAIS DA PÁGINA ===
 document.addEventListener("DOMContentLoaded", () => {
-    // Inicia os básicos
     typeWriter();
     updateTimer();
     setInterval(updateTimer, 1000);
 
-    // Botão de amor (Coração principal)
     const btn = document.getElementById("loveBtn");
     if (btn) {
         btn.addEventListener("click", () => {
@@ -241,7 +352,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Clique na foto principal
     const mainPhoto = document.getElementById("mainPhoto");
     if (mainPhoto) {
         mainPhoto.addEventListener("click", () => {
@@ -249,7 +359,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Estrelinhas Secretas (Encontrar 3 para abrir a carta)
     const clues = document.querySelectorAll('.secret-clue');
     const modal = document.getElementById('letterModal'); 
     const closeBtn = document.getElementById('closeLetter'); 
@@ -286,29 +395,29 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Cheat Code Mobile (Toques no texto da máquina de escrever)
+    // Cheat Code Mobile (5 = grazi | 8 = murilo | 10+ = euteamo)
     const textoMensagem = document.getElementById("typewriter");
     let contagemToques = 0;
     let timerToque;
 
     if (textoMensagem) {
         textoMensagem.style.cursor = "pointer";
+        textoMensagem.style.touchAction = "manipulation";
         
         textoMensagem.addEventListener("click", () => {
             contagemToques++;
-            
-            // Cancela o timer anterior a cada toque rápido
             clearTimeout(timerToque);
             
-            // Só toma a decisão quando parar de tocar por 600 milissegundos
             timerToque = setTimeout(() => {
-                if (contagemToques >= 8) {
+                if (contagemToques >= 10) {
+                    iniciarMosaicoAmor();
+                } else if (contagemToques >= 8) {
                     iniciarHackEApagao("murilo");
                 } else if (contagemToques >= 5) {
                     iniciarHackEApagao("grazi");
                 }
-                contagemToques = 0; // Reseta depois de executar
-            }, 600); 
+                contagemToques = 0;
+            }, 650); 
         });
     }
 
@@ -343,15 +452,17 @@ document.addEventListener("DOMContentLoaded", () => {
 // === CHEAT CODE TECLADO (PC) ===
 let inputBuffer = "";
 window.addEventListener('keydown', (e) => {
+    if (e.key.length !== 1) return; // Ignora Shift, Enter, Backspace, etc.
     inputBuffer += e.key.toLowerCase();
     
-    // Mantém o buffer curto para não gastar memória
     if (inputBuffer.length > 20) {
         inputBuffer = inputBuffer.substring(inputBuffer.length - 20);
     }
     
-    // Verifica se digitou um dos códigos
-    if (inputBuffer.includes("grazi")) {
+    if (inputBuffer.includes("euteamo")) {
+        inputBuffer = "";
+        iniciarMosaicoAmor();
+    } else if (inputBuffer.includes("grazi")) {
         inputBuffer = ""; 
         iniciarHackEApagao("grazi");
     } else if (inputBuffer.includes("murilo")) {
